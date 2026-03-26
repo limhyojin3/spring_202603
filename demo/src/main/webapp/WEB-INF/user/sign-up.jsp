@@ -26,6 +26,19 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
+        <div>
+            <label>아이디 : <input v-model="userId"></label>
+            <button @click="fnCheck">중복체크</button>
+        </div>
+        <div>
+            <label>비밀번호 : <input v-model="pwd" type="password"></label>
+        </div>
+        <div>
+            <label>이름 : <input v-model="userName"></label>
+        </div>
+        <div>
+            <button @click="fnJoin">가입</button>
+        </div>
     </div>
 </body>
 </html>
@@ -35,20 +48,47 @@
         data() {
             return {
                 // 변수 - (key : value)
+                userId : "",
+                userName : "",
+                pwd : ""
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnList: function () {
+            fnJoin: function () {
                 let self = this;
-                let param = {};
+                let param = {
+                    userId : self.userId,
+                    userName : self.userName,
+                    pwd : self.pwd
+
+                };
                 $.ajax({
-                    url: "http://localhost:8080/",
+                    url: "http://localhost:8080/join.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
+                        //통신성공하면 해시맵을 리턴한다
+                        alert(data.message); //hashmap.message
+                    }
+                });
+            },
 
+            fnCheck: function () {
+                let self = this;
+                let param = {
+                    userId : self.userId
+
+                };
+                $.ajax({
+                    url: "http://localhost:8080/check.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        //통신성공하면 해시맵을 리턴한다
+                        alert(data.message); //hashmap.message
                     }
                 });
             }

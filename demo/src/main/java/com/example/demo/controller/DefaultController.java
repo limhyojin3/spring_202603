@@ -18,54 +18,55 @@ public class DefaultController {
 
 	
 	@Autowired
-	DefaultService defaultService;
+	DefaultService defaultService; //디폴트서비스
 	
-	
+	//--------------------------------------------------------------
 	
 	@RequestMapping("/default.do")
 	public String test(Model model) throws Exception{
 		return "/default";
 	}
-	
-	
-	@RequestMapping("/test.do")
-	public String test2(Model model) throws Exception{
-		return "/test";
-	}
-	
-	
-	
-	@RequestMapping(value = "/test.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public String test(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		
-		
-//		DefaultService obj = new DefaultService();
-		defaultService.getUserList();
-		
-		
-		
-		System.out.println("test.dox 호출 됨!!");
-		System.out.println(map);
-		
-		resultMap.put("result", "success");
-		resultMap.put("Hello", "Word");
-		
-		
-		return new Gson().toJson(resultMap); 
-	}
-	
-	
-	
-	
-	
+	//--------------------------------------------------------------
 	@RequestMapping(value = "/default.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	//--------------------------------------------------------------
 	@ResponseBody
 	public String login(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		return new Gson().toJson(resultMap); 
 	}
+	//--------------------------------------------------------------
+	//--------------------------------------------------------------
+	
+	
+	//http://localhost:8080/test.do
+	@RequestMapping("/test.do")
+	public String test2(Model model) throws Exception{
+		return "/test";  //"webapp/WEB-INF/test.jsp" 를 의미한다 !
+	}
+	
+	//--------------------------------------------------------------
+	@RequestMapping(value = "/test.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	
+	//--------------------------------------------------------------
+	@ResponseBody
+	public String test(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = defaultService.getUserList();
+		
+		return new Gson().toJson(resultMap); 
+	}
+	
+	//--------------------------------------------------------------
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
