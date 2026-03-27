@@ -20,23 +20,20 @@ public class DefaultController {
 	@Autowired
 	DefaultService defaultService; //디폴트서비스
 	
-	//--------------------------------------------------------------
+	//------------ [default] -------------------------------------------
 	
 	@RequestMapping("/default.do")
 	public String test(Model model) throws Exception{
 		return "/default";
 	}
-	//--------------------------------------------------------------
 	@RequestMapping(value = "/default.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	//--------------------------------------------------------------
 	@ResponseBody
 	public String login(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		return new Gson().toJson(resultMap); 
 	}
-	//--------------------------------------------------------------
-	//--------------------------------------------------------------
+	//--------------- [test] ------------------------------------------
 	
 	
 	//http://localhost:8080/test.do
@@ -45,10 +42,8 @@ public class DefaultController {
 		return "/test";  //"webapp/WEB-INF/test.jsp" 를 의미한다 !
 	}
 	
-	//--------------------------------------------------------------
 	@RequestMapping(value = "/test.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	
-	//--------------------------------------------------------------
 	@ResponseBody
 	public String test(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
@@ -58,15 +53,6 @@ public class DefaultController {
 		
 		return new Gson().toJson(resultMap); 
 	}
-	
-	//--------------------------------------------------------------
-	
-	
-	
-	
-	
-	
-	
 	
 	
 }

@@ -1,0 +1,101 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        table, tr, td, th{
+            border : 1px solid black;
+            border-collapse: collapse;
+            padding : 5px 10px;
+            text-align: center;
+        }
+        th{
+            background-color: beige;
+        }
+        tr:nth-child(even){
+            background-color: azure;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- html 코드는 id가 app인 태그 안에서 작업 -->
+        <h1>Board</h1>
+        <div>
+            <table>
+                <tr>
+                    <th>글번호</th>
+                    <th>유저아이디</th>
+                    <th>제목</th>
+                    <th>내용</th>
+                    <th>조회수</th>
+                    <th>글분류</th>
+                    <th>생성시간</th>
+                    <th>업데이트시간</th>
+                </tr>
+
+                <!-- tr 태그를 반복 생성 -->
+                <tr v-for="item in list">
+                    <td>{{item.boardNo}}</td>
+                    <td>{{item.userId}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.contents}}</td>
+                    <td>{{item.cnt}}</td>
+                    <td>{{item.kind}}</td>
+                    <td>{{item.cDateTime}}</td>
+                    <td>{{item.uDateTime}}</td>
+                </tr>
+                <!-- 이부분 item부분 읽기(+)-->
+                
+            </table>
+            <div>
+                {{list[0]}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                // 변수 - (key : value)
+                list : [] //[Board{},Board{},...]
+                           // item,  item....      <= v-for="item in list"
+            };
+        },
+        methods: {
+            // 함수(메소드) - (key : function())
+            fnList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:8080/board/list.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        //data={"list":[Board{},Board{},...], "message":...}
+
+                        console.log(data);
+                        self.list = data.list; //[Board{},Board{},...]
+                    }
+                });
+            }
+        }, // methods
+        mounted() {
+            // 처음 시작할 때 실행되는 부분
+            let self = this;
+            self.fnList();
+        }
+    });
+
+    app.mount('#app');
+</script>

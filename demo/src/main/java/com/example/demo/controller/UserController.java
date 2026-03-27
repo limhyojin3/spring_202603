@@ -18,14 +18,15 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
-	//--------------------------------------------------------------
+	
+	
+	//-------------- [login] ------------------------------------------
 	@RequestMapping("/login.do") //브라우저
 	public String test(Model model) throws Exception{
 		return "/user/login"; //.jsp
 	}
-	//--------------------------------------------------------------
+
 	@RequestMapping(value = "/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	//--------------------------------------------------------------
 									//ajax가 파라미터로 보낸값 map =>{userId=user02, pwd=pw02}
 	@ResponseBody
 	public String login(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -39,15 +40,12 @@ public class UserController {
 		return new Gson().toJson(resultMap); 
 	}
 	
-	//--------------------------------------------------------------
-	//--------------------------------------------------------------
+	//----------------- [join] ----------------------------------------
 	@RequestMapping("/join.do")
 	public String join(Model model) throws Exception{
 		return "/user/sign-up";
 	}
-	//--------------------------------------------------------------
 	@RequestMapping(value = "/join.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	//--------------------------------------------------------------
 									//ajax가 파라미터로 보낸값 map =>{userId=user02, pwd=pw02}
 	@ResponseBody
 	public String join(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -70,10 +68,10 @@ public class UserController {
 	
 	
 	
-	//--------------------------------------------------------------
+	//--------------- [check] -----------------------------------------
 	
 	@RequestMapping(value = "/check.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	//--------------------------------------------------------------
+	
 									//ajax가 파라미터로 보낸값 map
 	@ResponseBody
 	public String check(Model model, @RequestParam HashMap<String, Object> map) throws Exception {

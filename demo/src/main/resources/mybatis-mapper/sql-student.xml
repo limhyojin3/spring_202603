@@ -4,14 +4,42 @@
 
 <mapper namespace="com.example.demo.mapper.StudentMapper">
 			<!-- id= Mapper 안의 함수 이름--> <!-- resultType = model에 있는 클래스-->
-	<select id="selectStudentList" resultType="com.example.demo.model.Student">
+	<select id="selectStudentList" parameterType="hashmap" resultType="com.example.demo.model.Student">
 		SELECT *
-		FROM Student
+		FROM STUDENT
+		WHERE (STU_NO LIKE CONCAT('%', #{keyword}, '%') OR STU_NAME LIKE CONCAT('%', #{keyword}, '%'))
+		<if test="dept != '' and dept != null">
+			AND STU_DEPT = #{dept}
+		</if>	
+		
+		
 		<!-- 쿼리문으로 데이터 가져옴 ResultSet rs = executeQuery(sql); 안해도 됨 -->
 	</select>
 	
+	
+	
+	
 	<delete id="deleteStudent" parameterType="hashmap">
-		DELETE FROM STUDENT WHERE STU_NO = #{stuNo};
+		DELETE FROM STUDENT WHERE STU_NO = #{stuNo}
+										<!-- 내가 ajax를 통해 보낸 매개변수(해시맵key)-->
 	</delete>
+	
+	
+	
+	
+	<select id="selectStudent" parameterType="hashmap" resultType="com.example.demo.model.Student">
+		SELECT *
+		FROM STUDENT 
+		WHERE STU_NO = #{stuNo}
+						<!-- 내가 ajax를 통해 보낸 매개변수(해시맵key)-->
+		
+	</select>
+	
+	
+	<insert id="insertStudent" parameterType="hashmap">
+		INSERT INTO STUDENT
+		VALUES(#{stuNo}, #{stuName}, #{stuDept}, #{stuGrade}, NULL, #{stuGender}, NULL, NULL)
+	</insert>
+	
 	
 </mapper>
