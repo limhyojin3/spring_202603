@@ -8,6 +8,7 @@
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/js/page-change.js"></script>
     <style>
         table, tr, td, th{
             border : 1px solid black;
@@ -28,34 +29,36 @@
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
         <h1>Board</h1>
         <div>
+            <div>
+                검색어 : <input v-model="keyword">
+                <button @click="fnGetList">검색</button>
+            </div>
+
             <table>
                 <tr>
                     <th>글번호</th>
-                    <th>유저아이디</th>
                     <th>제목</th>
-                    <th>내용</th>
+                    <th>작성자</th>
                     <th>조회수</th>
-                    <th>글분류</th>
-                    <th>생성시간</th>
-                    <th>업데이트시간</th>
+                    <th>작성일</th>
                 </tr>
 
                 <!-- tr 태그를 반복 생성 -->
                 <tr v-for="item in list">
                     <td>{{item.boardNo}}</td>
+                    <td><a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}}</a></td>
                     <td>{{item.userId}}</td>
-                    <td>{{item.title}}</td>
-                    <td>{{item.contents}}</td>
                     <td>{{item.cnt}}</td>
-                    <td>{{item.kind}}</td>
                     <td>{{item.cDateTime}}</td>
-                    <td>{{item.uDateTime}}</td>
                 </tr>
                 <!-- 이부분 item부분 읽기(+)-->
                 
             </table>
-            <div>
+            <!-- <div>
                 {{list[0]}}
+            </div> -->
+            <div>
+                <a href="/board/add.do"><button>글쓰기</button></a>
             </div>
         </div>
     </div>
@@ -67,15 +70,19 @@
         data() {
             return {
                 // 변수 - (key : value)
-                list : [] //[Board{},Board{},...]
+                list : [], //[Board{},Board{},...]
                            // item,  item....      <= v-for="item in list"
+
+                keyword : ""
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnList: function () {
+            fnGetList: function () {
                 let self = this;
-                let param = {};
+                let param = {
+                    keyword : self.keyword
+                };
                 $.ajax({
                     url: "http://localhost:8080/board/list.dox",
                     dataType: "json",
@@ -88,12 +95,18 @@
                         self.list = data.list; //[Board{},Board{},...]
                     }
                 });
+            },
+            fnView : function(boardNo){
+                //alert(boardNo);
+                pageChange("/board/view.do", {boardNo : boardNo}); //페이지 이동하면서 매개변수(해쉬맵) 전달
+
+
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
-            self.fnList();
+            self.fnGetList();
         }
     });
 
