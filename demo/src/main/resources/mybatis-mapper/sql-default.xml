@@ -3,12 +3,24 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.mapper.DefaultMapper">
-			<!-- id= Mapper 안의 함수 이름--> <!-- resultType = model에 있는 클래스-->
-	<select id="selectUserList" resultType="com.example.demo.model.User">
-		SELECT *
-		FROM TBL_USER
-		<!-- 쿼리문으로 데이터 가져옴 ResultSet rs = executeQuery(sql); 안해도 됨 -->
+	<!-- 여러개 검색 -->
+	<select id="selectUserList" parameterType="hashmap" resultType="com.example.demo.model.User">
 	</select>
 	
+	<!-- 한개 검색 -->
+	<select id="selectUser" parameterType="hashmap" resultType="com.example.demo.model.User">
+	</select>
+	
+	<!-- 삽입 -->
+	<insert id="insertUser" parameterType="hashmap">
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="deleteUser" parameterType="hashmap">
+	</delete>
+	
+	<!-- 수정 -->
+	<update id="updateUser" parameterType="hashmap">
+	</update>
 	
 </mapper>

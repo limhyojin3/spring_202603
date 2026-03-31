@@ -13,19 +13,50 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.dao.DefaultService;
 import com.google.gson.Gson;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class DefaultController {
-
 	
 	@Autowired
-	DefaultService defaultService; //디폴트서비스
+	DefaultService defaultService;
 	
-	//------------ [default] -------------------------------------------
+	// 웹브라우저로 접속하는 주소, return은 jsp파일
+	@RequestMapping("/copy.do") 
+	public String copy(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		return "/copy";
+	}
 	
-	@RequestMapping("/default.do")
-	public String test(Model model) throws Exception{
+	// ajax가 호출하는 주소
+	@RequestMapping(value = "/copy.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String copy(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+//		resultMap = 서비스객체.함수(map);
+
+		return new Gson().toJson(resultMap); 
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// ====================================
+	@RequestMapping("/default.do") 
+	public String test(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
 		return "/default";
 	}
+	
+	@RequestMapping("/test.do")
+	public String test2(Model model) throws Exception{
+		return "/test"; 
+	}
+	
 	@RequestMapping(value = "/default.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String login(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -33,26 +64,13 @@ public class DefaultController {
 		
 		return new Gson().toJson(resultMap); 
 	}
-	//--------------- [test] ------------------------------------------
-	
-	
-	//http://localhost:8080/test.do
-	@RequestMapping("/test.do")
-	public String test2(Model model) throws Exception{
-		return "/test";  //"webapp/WEB-INF/test.jsp" 를 의미한다 !
-	}
-	
 	@RequestMapping(value = "/test.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	
 	@ResponseBody
 	public String test(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		
-		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
 		resultMap = defaultService.getUserList();
 		
 		return new Gson().toJson(resultMap); 
 	}
-	
-	
 }

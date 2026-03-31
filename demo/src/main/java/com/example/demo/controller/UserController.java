@@ -13,77 +13,82 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.dao.UserService;
 import com.google.gson.Gson;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class UserController {
 
 	@Autowired
 	UserService userService;
 	
-	
-	//-------------- [login] ------------------------------------------
-	@RequestMapping("/login.do") //브라우저
-	public String test(Model model) throws Exception{
-		return "/user/login"; //.jsp
-	}
-
-	@RequestMapping(value = "/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-									//ajax가 파라미터로 보낸값 map =>{userId=user02, pwd=pw02}
-	@ResponseBody
-	public String login(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		
-		HashMap<String, Object> resultMap = new HashMap<String, Object>(); //공간 생성
-		//System.out.println(map); //{userId=user02, pwd=pw02}
-		
-		
-		resultMap = userService.login(map); //x001
-		
-		return new Gson().toJson(resultMap); 
+	@RequestMapping("/login.do") 
+	public String login(Model model) throws Exception{
+		return "/user/login";
 	}
 	
-	//----------------- [join] ----------------------------------------
-	@RequestMapping("/join.do")
+	@RequestMapping("/join.do") 
 	public String join(Model model) throws Exception{
 		return "/user/sign-up";
 	}
+	
+	@RequestMapping("/addr.do") 
+	public String addr(Model model) throws Exception{
+		return "/user/jusoPopup";
+	}
+	
+	@RequestMapping(value = "/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String login(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println(map);
+		resultMap = userService.login(map);
+		
+		return new Gson().toJson(resultMap); 
+	}
+	
 	@RequestMapping(value = "/join.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-									//ajax가 파라미터로 보낸값 map =>{userId=user02, pwd=pw02}
 	@ResponseBody
 	public String join(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		
-		HashMap<String, Object> resultMap = new HashMap<String, Object>(); //공간 생성
-		//System.out.println(map); //{userId=user02, pwd=pw02}
-		
-		
-		resultMap = userService.addUser(map); //x001
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println(map);
+		resultMap = userService.addUser(map);
 		
 		return new Gson().toJson(resultMap); 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//--------------- [check] -----------------------------------------
 	
 	@RequestMapping(value = "/check.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	
-									//ajax가 파라미터로 보낸값 map
 	@ResponseBody
 	public String check(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		
-		HashMap<String, Object> resultMap = new HashMap<String, Object>(); //공간 생성
-		//System.out.println(map); //{userId=user99, pwd=pw99, userName=규}
-		
-		
-		resultMap = userService.checkUser(map); //x001
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println(map);
+		resultMap = userService.checkUser(map);
 		
 		return new Gson().toJson(resultMap); 
 	}
 	
+	
+	// === 복습(User 테이블) ===
+	@RequestMapping("/user/list.do") 
+	public String copy(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		return "/user/user-list";
+	}
+	
+	@RequestMapping(value = "/user/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String copy(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.getUserList(map);
+
+		return new Gson().toJson(resultMap); 
+	}
+	
+	@RequestMapping(value = "/user/remove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String remove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.removeUser(map);
+
+		return new Gson().toJson(resultMap); 
+	}
 	
 }

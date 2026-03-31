@@ -29,12 +29,18 @@
         <div>
             <label>아이디 : <input v-model="userId"></label>
             <button @click="fnCheck">중복체크</button>
-        </div>
+        </div> 
         <div>
             <label>비밀번호 : <input v-model="pwd" type="password"></label>
-        </div>
+        </div> 
         <div>
             <label>이름 : <input v-model="userName"></label>
+        </div> 
+        <div>
+            <label>주소 : 
+                <input v-model="addr">
+                <button @click="fnAddr()">주소검색</button>
+            </label>
         </div>
         <div>
             <button @click="fnJoin">가입</button>
@@ -44,24 +50,28 @@
 </html>
 
 <script>
+    function jusoCallBack(roadFullAddr,roadAddrPart1,addrDetail,roadAddrPart2,engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn,detBdNmList,bdNm,bdKdcd,siNm,sggNm,emdNm,liNm,rn,udrtYn,buldMnnm,buldSlno,mtYn,lnbrMnnm,lnbrSlno,emdNo){
+        
+        window.vueObj.addr = roadFullAddr;
+    }
     const app = Vue.createApp({
         data() {
             return {
                 // 변수 - (key : value)
                 userId : "",
                 userName : "",
-                pwd : ""
+                pwd : "",
+                addr : ""
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnJoin: function () {
+            fnJoin : function () {
                 let self = this;
                 let param = {
                     userId : self.userId,
                     userName : self.userName,
                     pwd : self.pwd
-
                 };
                 $.ajax({
                     url: "http://localhost:8080/join.dox",
@@ -69,17 +79,14 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        //통신성공하면 해시맵을 리턴한다
-                        alert(data.message); //hashmap.message
+                        alert(data.message);
                     }
                 });
             },
-
-            fnCheck: function () {
+            fnCheck : function () {
                 let self = this;
                 let param = {
                     userId : self.userId
-
                 };
                 $.ajax({
                     url: "http://localhost:8080/check.dox",
@@ -87,15 +94,18 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        //통신성공하면 해시맵을 리턴한다
-                        alert(data.message); //hashmap.message
+                        alert(data.message);
                     }
                 });
+            },
+            fnAddr : function(){
+                window.open("/addr.do", "addr", "width=500, height=500");
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            window.vueObj = this;
         }
     });
 
