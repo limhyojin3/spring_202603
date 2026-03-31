@@ -47,5 +47,15 @@
 		FROM DEPARTMENT
 		WHERE BUILD IS NOT NULL
 	</select>
+	
+	<insert id="insertStu" parameterType="hashmap">
+		INSERT INTO STU(STUNO, NAME, GRADE, DEPTNO1, PROFNO)
+		VALUES(#{stuNo}, #{stuName}, #{grade}, #{deptNo}, #{profNo})
+	</insert>
+	
+	<insert id="insertProf" parameterType="hashmap">
+		INSERT INTO PROFESSOR(PROFNO, NAME, POSITION, PAY, DEPTNO)
+		VALUES(#{profNo}, #{profName}, #{position}, #{pay}, #{deptNo})
+	</insert>
 
 </mapper>

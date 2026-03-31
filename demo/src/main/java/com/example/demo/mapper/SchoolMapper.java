@@ -18,4 +18,10 @@ public interface SchoolMapper {
 	
 	//학과 목록
 	public List<Dept> selectDeptList(HashMap<String, Object> map);
+	
+	// 학생 추가
+	public int insertStu(HashMap<String, Object> map);
+	
+	// 교수 추가
+	public int insertProf(HashMap<String, Object> map);
 }

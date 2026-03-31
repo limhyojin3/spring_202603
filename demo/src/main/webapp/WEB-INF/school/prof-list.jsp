@@ -64,7 +64,9 @@
                     </tr>
                 </table>
             </div>
-
+            <div class="btn-area">
+                <a href="/prof/add.do"><button>교수추가</button></a>
+            </div>
         </div>
     </div>
 </body>
