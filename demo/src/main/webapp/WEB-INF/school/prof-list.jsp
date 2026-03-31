@@ -47,6 +47,7 @@
             <div class="table-area">
                 <table>
                     <tr>
+                        <th>선택</th>
                         <th>번호</th>
                         <th>이름</th>
                         <th>포지션</th>
@@ -55,6 +56,7 @@
                         <th>학과</th>
                     </tr>
                     <tr v-for="item in list">
+                        <td><input type="radio" name="prof" v-model="selectItem" :value="item.profNo"></td>
                         <td>{{item.profNo}}</td>
                         <td>{{item.name}}</td>
                         <td>{{item.position}}</td>
@@ -66,6 +68,7 @@
             </div>
             <div class="btn-area">
                 <a href="/prof/add.do"><button>교수추가</button></a>
+                <button @click="fnRemove">삭제</button>
             </div>
         </div>
     </div>
@@ -80,7 +83,8 @@
                 list : [],
                 deptList : [],
                 position : "",
-                deptNo : ""
+                deptNo : "",
+                selectItem : ""
             };
         },
         methods: {
@@ -100,6 +104,23 @@
                         console.log(data);
                         self.list = data.list;
                         self.deptList = data.deptList;
+                    }
+                });
+            },
+            fnRemove : function(){
+                let self = this;
+                let param = {
+                    profNo : self.selectItem
+                };
+                $.ajax({
+                    url: "http://localhost:8080/prof/remove.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        alert(data.message);
+                        self.selectItem = "";
+                        self.fnGetList();
                     }
                 });
             }

@@ -25,6 +25,7 @@ public class DefaultService {
 	//	User info = defaultMapper.selectUser();
 	// 수정, 삭제, 삽입 -> updateXXX, deleteXXX, insertXXX
 	//	int result = defaultMapper.updateXXX();
+	
 	public HashMap<String, Object> getItem(HashMap<String, Object> map){
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {

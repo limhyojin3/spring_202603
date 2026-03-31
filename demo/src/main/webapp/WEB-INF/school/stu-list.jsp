@@ -55,6 +55,7 @@
                         <th>학과</th>
                         <th>학년</th>
                         <th>담당교수</th>
+                        <th>삭제</th>
                     </tr>
                     <tr v-for="item in list">
                         <td>{{item.stuNo}}</td>
@@ -63,6 +64,7 @@
                         <td>{{item.dName3}}</td>
                         <td>{{item.grade}}</td>
                         <td>{{item.profName}}</td>
+                        <td><button @click="fnRemove(item.stuNo)">삭제</button></td>
                     </tr>
                 </table>
             </div>
@@ -114,6 +116,22 @@
                     success: function (data) {
                         console.log(data);
                         self.deptList = data.list;
+                    }
+                });
+            },
+            fnRemove : function(stuNo){
+                let self = this;
+                let param = {
+                    stuNo : stuNo
+                };
+                $.ajax({
+                    url: "http://localhost:8080/stu/remove.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        alert(data.message);
+                        self.fnGetList();
                     }
                 });
             }

@@ -51,7 +51,7 @@
                 <select v-model="deptNo">                       
                                                             <!-- 학과번호랑 학과이름 연결지어,,,-->
                     <option v-for="item in deptList" :value="item.deptNo">{{item.dName}}</option>
-                                 <!-- **행을 의미함(item)-->   <!-- :value=101,102..-->
+                                 <!-- 리스트의 요소들 -->   <!-- :value=101,102..-->
                 </select>
             </label>
         </div>
@@ -88,7 +88,7 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        self.deptList = data.list;
+                        self.deptList = data.list; //학과리스트 [{deptNo=101, dName='컴퓨터공학과',,}{deptNo=102, ,,,},,]
                         self.deptNo = data.list[0].deptNo //101 //초기화
                     }
                 });

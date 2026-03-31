@@ -28,7 +28,10 @@
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
         <div>
-            <label>학번 : <input v-model="stuNo"></label>
+            <label>학번 : <input v-model="stuNo" maxlength="4" @input="fnStuNoInput"></label>
+            <span v-if="stuFlg" style="color:blue">{{message}}</span>
+            <span v-else style="color:red">{{message}}</span>
+            <span></span>
         </div> 
         <div>
             <label>이름 : <input v-model="stuName"></label>
@@ -80,7 +83,9 @@
                 stuName : "",
                 grade : "1",
                 deptNo : "",
-                profNo : ""
+                profNo : "",
+                message : "",
+                stuFlg : false //이미사용중인학번
             };
         },
         methods: {
@@ -134,8 +139,34 @@
                         }
                     }
                 });
+            },
+            fnStuNoInput : function(){
+
+                let self = this;
+                self.stuNo = self.stuNo.replace(/[^0-9]/g, ''); //0~9 외에는 ''(빈값)으로 처리
+                let param = {
+                    stuNo : self.stuNo
+                };
+
+                if(self.stuNo.length != 4){
+                    self.stuFlg = false;
+                    self.message ="학번은 4글자 입니다.";
+                    return;
+                }
+
+                $.ajax({
+                    url: "http://localhost:8080/stu/check.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.message);
+                        self.message = data.message; //이미사용중인학번
+                        self.stuFlg = data.stuFlg; //false
+                    }
+                });
             }
-        }, // methods
+         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
