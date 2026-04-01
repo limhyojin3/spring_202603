@@ -28,24 +28,18 @@
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
         <div>
-            제목 : {{info.title}}
+            이름 : {{info.name}}
         </div> 
         <div>
-            조회수 : {{info.cnt}}
-        </div> 
-        <div v-for="item in fileList">
-            <img :src="item.filePath">
-
-        </div>
-        <div>
-            내용 : {{info.contents}}
-        </div> 
-         <div>
-            내용(html태그적용) :  <div v-html="info.contents"></div>
+            교수번호 : {{info.profNo}}
         </div> 
         <div>
-            <button @click="fnEdit">수정</button>
-        </div>
+            학과 : {{info.dName3}}
+        </div> 
+        <div>
+            급여 : {{info.pay}}
+        </div> 
+        <button @click="fnEdit">수정</button>
     </div>
 </body>
 </html>
@@ -55,40 +49,35 @@
         data() {
             return {
                 // 변수 - (key : value)
-                boardNo : "${boardNo}",
-                info : {},
-                fileList :[]
+                profNo : "${map.profNo}",
+                info : {}
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnGetBoard : function () {
+            fnGetInfo : function () {
                 let self = this;
                 let param = {
-                    boardNo : self.boardNo,
-                    kind : "view"
+                    profNo : self.profNo
                 };
                 $.ajax({
-                    url: "http://localhost:8080/board/info.dox",
+                    url: "http://localhost:8080/prof/info.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        console.log(data);
                         self.info = data.info;
-                        self.fileList = data.fileList;
                     }
                 });
             },
             fnEdit : function(){
-                let self = this;
-                pageChange("/board/edit.do", {boardNo : self.boardNo});
+                pageChange("/prof/edit.do", {profNo : this.profNo});  
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
-            self.fnGetBoard();
+            self.fnGetInfo();
         }
     });
 

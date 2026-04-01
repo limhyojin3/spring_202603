@@ -18,4 +18,8 @@ public interface UserMapper {
 	public User selectUser(HashMap<String, Object> map);
 	
 	public int insertUser(HashMap<String, Object> map);
+	
+	public int insertUserFile(HashMap<String, Object> map);
+	
+	public List<User> selectUserFile(HashMap<String, Object> map);
 }

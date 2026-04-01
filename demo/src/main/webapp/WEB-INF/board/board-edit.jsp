@@ -8,17 +8,18 @@
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <style>
-        body{
+        body {
             box-sizing: border-box;
         }
-        #container{
-            width: 800px;
-            margin:50px auto;
+        #container {
+            width : 800px;
+            margin : 50px auto;
         }
-
-        .contents{
-            width:800px;
+        .contents {
+            width : 800px;
         }
         table, tr, td, th{
             border : 1px solid black;
@@ -29,28 +30,27 @@
         th{
             background-color: beige;
         }
-
-        table{
-            width:100%;
+        table {
+            width: 100%;
         }
-
-        th{
-            width : 20%;
+        th {
+            width: 20%;
         }
         td {
             text-align: left;
         }
-        select{
-            height :30px;
+        select {
+            height: 30px;
             width: 100px;
         }
-        .title{
-            height:30px;
+        .title {
+            height: 30px;
             width: 90%;
         }
         .btn-area{
             text-align: center;
             margin-top: 20px;
+            
         }
         button{
             height: 40px;
@@ -61,15 +61,15 @@
             border: 1px solid #ababab;
             box-shadow: 2px 2px 2px black;
             cursor: pointer;
-
         }
-
+        .ql-container {
+            height: 80%;
+        }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-        
         <div id="container">
             <div class="contents">
                 <table>
@@ -81,8 +81,6 @@
                                 <option value="2">자유게시판</option>
                                 <option value="3">문의게시판</option>
                             </select>
-
-
                         </td>
                     </tr>
                     <tr>
@@ -93,21 +91,19 @@
                     </tr>
                     <tr>
                         <th>내용</th>
-                        <td>
-                            <textarea v-model="info.contents" cols="75" rows="10"></textarea>
+                        <td style="height: 300px;">
+                            <!-- <textarea v-model="info.contents" cols="75" rows="10"></textarea> -->
+                            <div id="editor"></div> 
                         </td>
                     </tr>
-                    
-                </table>
+                </table> 
                 <div class="btn-area">
                     <button @click="fnEdit">수정</button>
                     <button>되돌아가기</button>
                 </div>
             </div>
-
         </div>
     </div>
-    
 </body>
 </html>
 
@@ -116,18 +112,18 @@
         data() {
             return {
                 // 변수 - (key : value)
-                boardNo : "${boardNo}", //리퀘스트객체로 해쉬맵{boardNo=14} 넘어옴
-                info :{
-                    kind: "1",
-                    title: "",
-                    contents:""
-                } // 채워졌다가,  위에서 수정하면 value값이 바뀜.
+                boardNo : "${boardNo}",
+                info : {
+                    kind : "1",
+                    title : "",
+                    contents : ""
+                }
                 
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnGetBoard: function () {
+            fnGetBoard : function () {
                 let self = this;
                 let param = {
                     boardNo : self.boardNo,
@@ -139,29 +135,49 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        self.info = data.info; //Board{ : , : ,...}
-
+                        self.info = data.info;
+                        self.fnEditor();
                     }
                 });
             },
-            fnEdit : function() {
+            fnEdit : function(){
                 let self = this;
-                let param = self.info; //파라미터로 self.info를 넘길거다.(의도)
-                self.info.boardNo = self.boardNo;  //넘기기전에 boardNo도 추가해서 보내주기
-
+                let param = self.info;
+                self.info.boardNo = self.boardNo;
                 $.ajax({
                     url: "http://localhost:8080/board/edit.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        //self.info = data.info;//null //나올수있나?( )-> 굳이..(x)
-                        
                         alert(data.message);
                         location.href="/board/list.do";
                     }
                 });
+            },
+            fnEditor : function(){
+                let self = this;
+                // Quill 에디터 초기화
+                var quill = new Quill('#editor', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                            ['bold', 'italic', 'underline'],
+                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['link', 'image'],
+                            ['clean'],
+                        ]
+                    }
+                });
 
+                quill.root.innerHTML = self.info.contents;
+
+                // 에디터 내용이 변경될 때마다 Vue 데이터를 업데이트
+                quill.on('text-change', function() {
+                    self.info.contents = quill.root.innerHTML;
+                });
             }
         }, // methods
         mounted() {
