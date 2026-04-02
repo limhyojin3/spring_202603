@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.dao.SchoolService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -120,6 +123,30 @@ public class SchoolController {
 	public String remove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = schoolService.removeStu(map);
+
+		return new Gson().toJson(resultMap); 
+	}
+	
+	@RequestMapping(value = "/stu/remove-all.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String removeAll(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		
+		String json = map.get("selectList").toString(); 
+		
+		//json형태로 넘어온걸 자바에서 쓸수있게 바꿔줌.(아래 2줄이)
+		ObjectMapper mapper = new ObjectMapper();
+		List<Object> list = mapper.readValue(json, new TypeReference<List<Object>>(){});
+		
+		//그러고나서 map에 담아둠.
+		map.put("list", list);// selectList랑 list 둘다 존재함
+		
+		System.out.println(map); //{selectList=["9712","9713","9714"]}
+		//{selectList=["9714","9715"], list=[9714, 9715]}
+		
+		resultMap = schoolService.removeAllStu(map);
 
 		return new Gson().toJson(resultMap); 
 	}

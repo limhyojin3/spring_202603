@@ -46,9 +46,18 @@
                     </select>
                 </label>
             </div>
+
+            <div class="order-area">
+                <label><input type="radio" name="order" value="name" v-model="orderItem"> 이름순</label>
+                <label><input type="radio" name="order" value="dept" v-model="orderItem"> 학과순</label>
+                <label><input type="radio" name="order" value="grade" v-model="orderItem"> 학년순</label>
+                <button @click="fnGetList">조회</button>
+            </div>
+
             <div class="table-area">
                 <table>
                     <tr>
+                        <th>선택</th>
                         <th>학번</th>
                         <th>이름</th>
                         <th>학부</th>
@@ -58,6 +67,7 @@
                         <th>삭제</th>
                     </tr>
                     <tr v-for="item in list">
+                        <td><input type="checkbox" v-model="selectList" :value="item.stuNo"></td>
                         <td>{{item.stuNo}}</td>
                         <td>
                             <a href="javascript:;" @click="fnView(item.stuNo)">{{item.name}}</a>
@@ -69,6 +79,10 @@
                         <td><button @click="fnRemove(item.stuNo)">삭제</button></td>
                     </tr>
                 </table>
+            </div>
+            <div class="btn-area">
+                <button><a href="/stu/add.do">학생추가</a></button>
+                <button @click="fnRemoveAll">삭제</button>
             </div>
         </div> 
     </div>
@@ -82,8 +96,10 @@
                 // 변수 - (key : value)
                 list : [],
                 deptList : [],
+                selectList : [],
                 grade : "",
-                deptNo : ""
+                deptNo : "",
+                orderItem : "grade"
             };
         },
         methods: {
@@ -92,7 +108,8 @@
                 let self = this;
                 let param = {
                     grade : self.grade,
-                    deptNo : self.deptNo
+                    deptNo : self.deptNo,
+                    orderItem : self.orderItem
                 };
                 $.ajax({
                     url: "http://localhost:8080/stu/list.dox",
@@ -133,6 +150,25 @@
                     data: param,
                     success: function (data) {
                         alert(data.message);
+                        self.fnGetList();
+                    }
+                });
+            },
+
+            fnRemoveAll : function(){
+                let self = this;
+                var fList = JSON.stringify(self.selectList); //리스트를 json 형태로 바꿔서 보내준다.
+                let param = {
+                    selectList : fList
+                };
+                $.ajax({
+                    url: "http://localhost:8080/stu/remove-all.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        alert(data.message);
+                        self.selectList = [];
                         self.fnGetList();
                     }
                 });

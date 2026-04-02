@@ -34,12 +34,31 @@
 		INNER JOIN DEPARTMENT D1 ON S.DEPTNO1 = D1.DEPTNO
 		INNER JOIN DEPARTMENT D2 ON D1.PART = D2.DEPTNO
 		WHERE 1=1 
+		
 		<if test="grade != '' and grade != null">
 			AND S.GRADE = #{grade}
 		</if>
 		<if test="deptNo != '' and deptNo != null">
 			AND S.DEPTNO1 = #{deptNo}
 		</if>
+		
+		<choose>
+		
+			<!-- test=orderItem : map으로 넘어온 키 **-->
+			<when test="orderItem == 'name'">
+				ORDER BY NAME
+			</when>
+			
+			<when test="orderItem == 'dept'">
+				ORDER BY D1.DNAME
+			</when>
+			<when test="orderItem == 'grade'">
+				ORDER BY GRADE
+			</when>
+			<otherwise>
+				ORDER BY GRADE
+			</otherwise>
+		</choose>
 	</select>
 	
 	<select id="selectDeptList" parameterType="hashmap" resultType="com.example.demo.model.Dept">
@@ -76,6 +95,16 @@
 	<delete id="deleteStu" parameterType="hashmap">
 		DELETE FROM STU
 		WHERE STUNO = #{stuNo}
+	</delete>
+	
+	<delete id="deleteAllStu" parameterType="hashmap">
+		DELETE FROM STU
+		WHERE STUNO IN 
+				<!--collection="list" 헷깔려(+) =>map에 있는(넘어온거) list에서 꺼냄.-->
+		<foreach collection="list" item="item" open="(" separator="," close=")">
+			#{item}
+			<!-- (9411,9413,9315)-->
+		</foreach> 
 	</delete>
 	
 	<delete id="deleteProf" parameterType="hashmap">

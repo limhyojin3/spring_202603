@@ -35,6 +35,9 @@ public interface SchoolMapper {
 	// 학생 삭제
 	public int deleteStu(HashMap<String, Object> map);
 	
+	// 학생 여러명 삭제
+	public int deleteAllStu(HashMap<String, Object> map);
+	
 	// 교수 삭제
 	public int deleteProf(HashMap<String, Object> map);
 	
