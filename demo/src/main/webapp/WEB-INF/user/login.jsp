@@ -33,7 +33,7 @@
             <label>비밀번호 : <input v-model="pwd" type="password"></label>
         </div>
         <button @click="fnLogin">로그인</button>
-        <button>회원가입</button>
+        <button @click="fnJoin">회원가입</button>
     </div>
 </body>
 </html>
@@ -69,6 +69,9 @@
                         
                     }
                 });
+            },
+            fnJoin: function(){
+                location.href = "/join.do";
             }
         }, // methods
         mounted() {

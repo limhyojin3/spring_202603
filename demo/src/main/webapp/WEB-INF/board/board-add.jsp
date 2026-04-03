@@ -128,7 +128,7 @@
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnAdd : function () {
+            fnAdd : function () {           //1. 글 먼저 제출
                 let self = this;
                 let param = self.info;
                 $.ajax({
@@ -141,9 +141,14 @@
 
                         if(data.result == 'success'){
                             
+                            //2. 파일 있으면 “이 파일은 123번 글에 붙여주세요”
+
                             if($("#file1")[0].files[0] != undefined){
                                 self.fnFileAdd(data.boardNo);
                             } else{
+
+                                //3. 끝나면 목록 페이지로 이동
+
                                 alert("등록되었습니다!");
                                 location.href="/board/list.do";
                             }
@@ -162,21 +167,32 @@
                 self.upload(form);  
             },
 
-            // 파일 업로드 --------> ( )
+            // 진짜 파일 업로드 --------> (+)
             upload : function(form){
                 var self = this;
                 $.ajax({
                     url : "/board/fileUpload.dox",
                     type : "POST",
+
+                    // 파일은 일반 데이터처럼 보내면 안 됨
+                    // 그래서 그대로(form 그대로) 보내기 설정
                     processData : false,
-                    contentType : false,
+                    contentType : false, 
+                    
                     data : form,
+
                     success: function(response) { 
                         alert("등록 됨!");
                         location.href="/board/list.do";
                     }	           
                 });
             }
+
+                // 결론 : 🔹 🔥 핵심 포인트 3개
+                // 글 저장과 파일 업로드는 따로 처리됨
+                // 파일은 글 번호(boardNo)로 연결
+                // 파일 있으면 → 추가 업로드 / 없으면 바로 종료
+                
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
