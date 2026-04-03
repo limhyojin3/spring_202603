@@ -48,4 +48,14 @@ public class ProductController {
 		
 		return new Gson().toJson(resultMap); 
 	}
+	
+	@RequestMapping("/product/payment.do") 
+	public String payment(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		return "/product/payment";
+	}
+	
+	@RequestMapping("/product/auth.do") 
+	public String auth(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		return "/product/auth";
+	}
 }

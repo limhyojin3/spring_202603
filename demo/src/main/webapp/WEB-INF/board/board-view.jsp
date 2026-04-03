@@ -43,8 +43,9 @@
          <div>
             내용(html태그적용) :  <div v-html="info.contents"></div>
         </div> 
-        <div>
+        <div v-if="info.userId == sessionId || sessionRole == 'A'">
             <button @click="fnEdit">수정</button>
+            <button>삭제</button>
         </div>
     </div>
 </body>
@@ -56,6 +57,8 @@
             return {
                 // 변수 - (key : value)
                 boardNo : "${boardNo}",
+                sessionId : "${sessionId}",
+                sessionRole : "${sessionRole}",
                 info : {},
                 fileList :[]
             };

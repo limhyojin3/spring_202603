@@ -141,7 +141,13 @@
 
                         if(data.result == 'success'){
                             
-                            self.fnFileAdd(data.boardNo);
+                            if($("#file1")[0].files[0] != undefined){
+                                self.fnFileAdd(data.boardNo);
+                            } else{
+                                alert("등록되었습니다!");
+                                location.href="/board/list.do";
+                            }
+                            
                             
                         }
                     }
@@ -154,18 +160,18 @@
                 form.append( "file1",  $("#file1")[0].files[0] );
                 form.append( "idx",  boardNo); // 임시 pk
                 self.upload(form);  
-            }
+            },
 
-            // 파일 업로드
-            , upload : function(form){
+            // 파일 업로드 --------> ( )
+            upload : function(form){
                 var self = this;
                 $.ajax({
-                    url : "/board/fileUpload.dox"
-                    , type : "POST"
-                    , processData : false
-                    , contentType : false
-                    , data : form
-                    , success:function(response) { 
+                    url : "/board/fileUpload.dox",
+                    type : "POST",
+                    processData : false,
+                    contentType : false,
+                    data : form,
+                    success: function(response) { 
                         alert("등록 됨!");
                         location.href="/board/list.do";
                     }	           

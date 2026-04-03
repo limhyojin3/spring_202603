@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.common.Message;
 import com.example.demo.mapper.UserMapper;
-import com.example.demo.model.Board;
 import com.example.demo.model.User;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class UserService {
@@ -17,14 +19,41 @@ public class UserService {
 	@Autowired
 	UserMapper userMapper;
 	
+	@Autowired
+	HttpSession session;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
 	public HashMap<String, Object> login(HashMap<String, Object> map){
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		User user = userMapper.selectUser(map);
+		
+		resultMap.put("loginResult", false);
 		if(user != null) {
 //			ooo님 환영합니다!
-			if(user.getPwd().equals(map.get("pwd"))) {
+			
+			
+			
+			if(passwordEncoder.matches((String) map.get("pwd"), user.getPwd())) {
 				resultMap.put("message", user.getUserName() + "님 환영합니다.");
+				resultMap.put("loginResult", true);
+				
+				
+				session.setAttribute("sessionId", user.getUserId());
+				session.setAttribute("sessionName", user.getUserName());
+				session.setAttribute("sessionRole", user.getRole());
+				
+//				if(user.getRole().equals("A")) {
+//					resultMap.put("url", "/prof/list.do");
+//				} else {
+//					resultMap.put("url", "/stu/list.do");
+//				}
+				resultMap.put("url", "/board/list.do");
+				
+				//session.invalidate();  // 세션에 있는 모든 정보 삭제(로그아웃 버튼 눌렀을 때)
+				
 			} else {
 				resultMap.put("message", "비밀번호를 확인해주세요.");
 			}
@@ -41,8 +70,15 @@ public class UserService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
+			
+			// 3-1. 비밀번호 암호화(해시)
+			String hashPwd = passwordEncoder.encode((String) map.get("pwd"));
+			map.put("hashPwd", hashPwd);
+			
+			
 			int cnt = userMapper.insertUser(map);
 			User info = userMapper.selectUser(map);
+			
 			if(cnt > 0) {
 				resultMap.put("info", info);
 				resultMap.put("message", "회원가입 축하!");

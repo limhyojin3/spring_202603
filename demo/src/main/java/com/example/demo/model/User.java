@@ -10,6 +10,7 @@ public class User {
 	String userName;
 	String pwd;
 	String gender;
+	String role;
 	
 	// 첨부파일
 	int fileNo;

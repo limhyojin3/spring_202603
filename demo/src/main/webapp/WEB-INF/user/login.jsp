@@ -62,9 +62,11 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        console.log(data);
-
-                        alert(data.message); //"ooo 님 환영합니다 !"
+                        alert(data.message);
+                        if(data.loginResult){
+                            location.href = data.url;  
+                        }
+                        
                     }
                 });
             }
