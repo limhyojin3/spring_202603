@@ -30,13 +30,21 @@
 	</select>
 	
 	
-	
-	
-	
 
 	<!-- 한개 검색 -->
+	<!--public Emp selectEmp(HashMap<String, Object> map); -->
 	<select id="selectEmp" parameterType="hashmap"
 		resultType="com.example.demo.model.Emp">
+		
+		SELECT 
+			E1.EMPNO, E1.ENAME AS ENAME,E1.JOB, E2.ENAME AS MGRNAME ,S.GRADE,D.DNAME
+		FROM EMP E1
+		LEFT JOIN EMP E2 ON E1.MGR = E2.EMPNO
+		LEFT JOIN DEPT D ON E1.DEPTNO = D.DEPTNO
+		LEFT JOIN SALGRADE S ON E1.SAL BETWEEN S.LOSAL AND S.HISAL
+		
+		WHERE 1=1 AND E1.EMPNO = #{empNo}
+		<!-- E1.EMPNO  <=  칼럼 앞에 E1. 빼먹지말기 !! ** 중요!! -->
 	</select>
 
 

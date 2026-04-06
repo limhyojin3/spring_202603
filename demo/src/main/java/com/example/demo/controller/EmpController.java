@@ -57,4 +57,26 @@ public class EmpController {
 		return new Gson().toJson(resultMap); 
 	}
 	
+	@RequestMapping("/emp-view.do") 
+	public String view(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		
+		//1.pageChange해서 매개변수(해시맵) 넘겨받고
+		//2.넘겨받은 해시맵을 setAttribute 한다음에 jsp 파일로 보내줘야함. 
+		// 넘겨줄때 setAttribute 필수!** 중요!
+		request.setAttribute("empNo", map.get("empNo")); 
+		
+		return "/emp/emp-view";
+	}
+	
+	@RequestMapping(value = "/emp-view.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	
+	@ResponseBody
+	public String view(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();//공간생성
+		
+		resultMap = empService.getEmp(map);
+		
+		return new Gson().toJson(resultMap); 
+	}
+	
 }

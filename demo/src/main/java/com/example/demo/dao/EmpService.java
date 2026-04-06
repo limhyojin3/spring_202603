@@ -76,6 +76,25 @@ public class EmpService {
 		}
 		return resultMap;
 	}
+
+	public HashMap<String, Object> getEmp(HashMap<String, Object> map){
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			
+			Emp info = empMapper.selectEmp(map);
+			
+			resultMap.put("info", info);
+			resultMap.put("result", "success");
+			resultMap.put("message", Message.MSG_SEARCH);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");
+			resultMap.put("message", Message.MSG_SERVER_ERR);
+		}
+		return resultMap;
+	}
 	
 	
 	

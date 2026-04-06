@@ -59,7 +59,7 @@
                 </tr>
                 <tr v-for="item in empList" >
                     <td>{{item.empNo}}</td>
-                    <td>{{item.eName}}</td>
+                    <td><a href="javascript:;" @click="fnView(item.empNo)">{{item.eName}}</a></td>
                     <td>{{item.job}}</td>
                     <td>{{item.mgrName}}</td>
                     <td>{{item.grade}}</td>
@@ -130,6 +130,12 @@
                 self.currentPage = page;
                 self.fnGetList();
 
+            },
+            fnView : function(empNo){
+                let self = this;
+                console.log(empNo);
+
+                pageChange("/emp-view.do", {empNo : empNo});//(url, param)
             }
         }, // methods
         mounted() {
