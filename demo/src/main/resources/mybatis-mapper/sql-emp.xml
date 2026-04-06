@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.EmpMapper">
+	<!-- 여러개 검색 -->
+	<select id="selectEmpList" parameterType="hashmap"
+		resultType="com.example.demo.model.Emp">
+		SELECT 
+			E1.EMPNO, E1.ENAME AS ENAME,E1.JOB, E2.ENAME AS MGRNAME ,S.GRADE,D.DNAME
+		FROM EMP E1
+		LEFT JOIN EMP E2 ON E1.MGR = E2.EMPNO
+		LEFT JOIN DEPT D ON E1.DEPTNO = D.DEPTNO
+		LEFT JOIN SALGRADE S ON E1.SAL BETWEEN S.LOSAL AND S.HISAL
+		
+		LIMIT #{pageSize} OFFSET #{offSet}
+	</select>
+	
+	<select id="selectEmpCount" parameterType="hashmap"
+		resultType="int">
+	
+		SELECT 
+			COUNT(*)
+		FROM EMP E1
+		LEFT JOIN EMP E2 ON E1.MGR = E2.EMPNO
+		LEFT JOIN DEPT D ON E1.DEPTNO = D.DEPTNO
+		LEFT JOIN SALGRADE S ON E1.SAL BETWEEN S.LOSAL AND S.HISAL
+		
+		<!-- 총 사원수 (페이지용)-->
+	
+	</select>
+	
+	
+	
+	
+	
+
+	<!-- 한개 검색 -->
+	<select id="selectEmp" parameterType="hashmap"
+		resultType="com.example.demo.model.Emp">
+	</select>
+
+
+	<!-- 파라미터 타입 왠만하면 String이나 해시맵임 -->
+	<select id="checkMgrExists" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM EMP
+		WHERE EMPNO = #{mgrNo} <!-- mgrNo -->
+	</select>
+	
+	<!-- 여기부터 (+)-->
+	<select id="checkDeptExists" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM DEPT
+		WHERE DEPTNO = #{deptNo}
+	</select>
+	
+
+	<!-- 대량의 데이터를 다룰 때는 쿼리를 여러 번 호출하는 것보다 하나의 쿼리문 안에서 처리하는 것이 성능상 유리합니다. -->
+	<!-- 삽입 -->
+	<insert id="insertEmp" parameterType="hashmap">
+	
+		INSERT INTO EMP(EMPNO, ENAME, JOB, MGR, SAL, DEPTNO)
+		VALUES(#{empNo}, #{eName}, #{job},#{mgrNo}, #{sal}, #{deptNo})
+		
+	</insert>
+
+
+	<!-- 삽입 -->
+	<!--<insert id="insertEmp" parameterType="hashmap">
+		INSERT INTO EMP(EMPNO, ENAME, JOB, MGR, SAL, DEPTNO) 
+		VALUES(#{empNo}, #{eName}, #{job},#{mgrNo}, #{sal}, #{deptNo})
+	</insert>-->
+
+	<!-- 삭제 -->
+	<delete id="deleteEmp" parameterType="hashmap">
+	</delete>
+
+	<!-- 수정 -->
+	<update id="updateEmp" parameterType="hashmap">
+	</update>
+
+</mapper>

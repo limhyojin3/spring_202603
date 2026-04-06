@@ -13,7 +13,7 @@
 			parameterType="hashmap" 
 			useGeneratedKeys="true" 
 			keyColumn="BOARDNO" 
-			keyProperty="boardNo">
+			keyProperty="boardNo"> <!--keyProperty 설명( )-->
 		INSERT INTO TBL_BOARD
 		VALUES(null, #{sessionId}, #{title}, #{contents}, 0, #{kind}, NOW(), NOW())
 	</insert>
