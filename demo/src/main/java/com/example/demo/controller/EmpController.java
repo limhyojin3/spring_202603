@@ -79,4 +79,16 @@ public class EmpController {
 		return new Gson().toJson(resultMap); 
 	}
 	
+	
+	@RequestMapping(value = "/emp-remove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	
+	@ResponseBody
+	public String remove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();//공간생성
+		
+		resultMap = empService.removeEmp(map);
+		
+		return new Gson().toJson(resultMap); 
+	}
+	
 }

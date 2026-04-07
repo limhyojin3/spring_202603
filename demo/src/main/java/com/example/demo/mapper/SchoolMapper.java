@@ -43,4 +43,12 @@ public interface SchoolMapper {
 	
 	// 학생 수정
 	public int updateStu(HashMap<String, Object> map);
+	
+	
+	//교수 전체 수
+	public int selectProfCount(HashMap<String, Object> map);
+	
+	
+	
+	
 }

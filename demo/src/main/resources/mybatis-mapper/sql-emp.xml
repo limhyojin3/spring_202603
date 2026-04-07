@@ -78,7 +78,9 @@
 	</insert>-->
 
 	<!-- 삭제 -->
-	<delete id="deleteEmp" parameterType="hashmap">
+	<!-- <delete>, <insert>, <update>는 결과타입을 int로 가정하고 결과를 반환하므로 명시하지 않습니다.(resultType="int"(X)) -->
+	<delete id="deleteEmp" parameterType="hashmap"> 
+		DELETE FROM EMP WHERE EMPNO = #{empNo}
 	</delete>
 
 	<!-- 수정 -->

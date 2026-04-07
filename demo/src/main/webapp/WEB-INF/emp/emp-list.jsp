@@ -23,7 +23,7 @@
             background-color: azure;
         }
 
-        #index {
+        #index, a {
             text-decoration: none;
             color: black;
             padding: 3px;
@@ -33,13 +33,17 @@
             font-weight: bold;
             color: blue;
         }
+        #name {
+            color:rgb(5, 56, 150);
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
         <div>
-            <select v-model="pageSize" @click="fnGetList">
+            <select v-model="pageSize" @change="currentPage = 1; fnGetList();">
                 <option value="5">5개씩</option>
                 <option value="10">10개씩</option>
                 <option value="20">20개씩</option>
@@ -59,7 +63,7 @@
                 </tr>
                 <tr v-for="item in empList" >
                     <td>{{item.empNo}}</td>
-                    <td><a href="javascript:;" @click="fnView(item.empNo)">{{item.eName}}</a></td>
+                    <td><a id="name" href="javascript:;" @click="fnView(item.empNo)">{{item.eName}}</a></td>
                     <td>{{item.job}}</td>
                     <td>{{item.mgrName}}</td>
                     <td>{{item.grade}}</td>
@@ -68,10 +72,12 @@
 
             </table>
             <div>
+                <a v-if="currentPage != 1" href="javascript:;" @click="currentPage -= 1; fnGetList();">◀</a>
                 <a @click="fnPage(num)" id="index" href="javascript:;" v-for="num in index" >
                     <span :class="{active : currentPage == num}">{{num}}</span>
                     <!-- :class 는 문법이다 -->
                 </a>
+                <a v-if="currentPage != index" href="javascript:;" @click="currentPage += 1; fnGetList();">▶</a>
             </div>
 
             <div>
@@ -88,9 +94,9 @@
             return {
                 // 변수 - (key : value)
                 empList : [],
-                pageSize: 5,
-                index : 1,    //총페이지사이즈 초기화
-                currentPage : 1 // 현재페이지
+                pageSize: 5,  // 한 페이지에 출력할 개수
+                index : 1,    // 최대 페이지 수 초기화, 총페이지사이즈 초기화
+                currentPage : 1 // 현재 페이지
             };
         },
         methods: {
@@ -101,7 +107,7 @@
                 let self = this;
                 let param = {
                     pageSize : self.pageSize,  //페이지사이즈
-                    offSet : self.pageSize * (self.currentPage - 1)
+                    offSet : self.pageSize * (self.currentPage - 1) //db에서 건너뛸 개수
                     //오프셋은 페이지사이즈 * (현재페이지 -1)
                     //규칙을 찾는것이 중요함!
                 };
@@ -117,7 +123,8 @@
                         console.log(self.empList);
 
                         self.index = Math.ceil(data.totalCount / self.pageSize); //13/5
-                        //index => 총 페이지수
+                        //index => 총 페이지수(최대페이지수)
+
                         console.log(self.index);
                     }
                 });
@@ -136,6 +143,12 @@
                 console.log(empNo);
 
                 pageChange("/emp-view.do", {empNo : empNo});//(url, param)
+            },
+            fnPagingMove : function(){
+                let self = this;
+
+                self.currentPage = self.currentPage - 1;
+
             }
         }, // methods
         mounted() {

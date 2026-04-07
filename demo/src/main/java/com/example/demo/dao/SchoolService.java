@@ -23,6 +23,11 @@ public class SchoolService {
 			List<Professor> list = schoolMapper.selectProfList(map);
 			List<Dept> deptList = schoolMapper.selectDeptList(map);
 			
+			
+			int totalCount = schoolMapper.selectProfCount(map);
+			resultMap.put("totalCount", totalCount);
+			
+			
 			resultMap.put("list", list);
 			resultMap.put("deptList", deptList);
 			resultMap.put("result", "success");
@@ -36,6 +41,11 @@ public class SchoolService {
 		return resultMap;
 	}
 	
+	private int getTotalCount(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	public HashMap<String, Object> getStuList(HashMap<String, Object> map){
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {

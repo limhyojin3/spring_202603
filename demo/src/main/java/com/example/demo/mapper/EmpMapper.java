@@ -22,9 +22,6 @@ public interface EmpMapper {
 	
 	public int selectEmpCount(HashMap<String, Object> map);
 	
-	
-	
-	
 	// 삭제 
 	public int deleteEmp(HashMap<String, Object> map);
 	// 수정

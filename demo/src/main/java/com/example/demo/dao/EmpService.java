@@ -96,6 +96,28 @@ public class EmpService {
 		return resultMap;
 	}
 	
-	
+	public HashMap<String, Object> removeEmp(HashMap<String, Object> map){
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			
+			int result = empMapper.deleteEmp(map);
+			
+			if(result > 0) {
+				resultMap.put("result", "success");
+				resultMap.put("message", Message.MSG_REMOVE);
+			} else {
+				throw new Exception();
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");
+			resultMap.put("message", Message.MSG_SERVER_ERR);
+		}
+		return resultMap;
+	}
 	
 }
